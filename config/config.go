@@ -58,11 +58,11 @@ func GenerateConfigFile(cfgFile string) {
 		configFile = filepath.Join(cfgFile)
 
 	} else {
-		if _, err := os.Stat(filepath.Join(usr.HomeDir, ".config", "coffeeburn", "config.yaml")); err == nil {
+		if _, err := os.Stat(filepath.Join(usr.HomeDir, ".config", "burntcoffee", "config.yaml")); err == nil {
 			fmt.Print("Config file already exists\n")
 			return
 		}
-		configDir := filepath.Join(usr.HomeDir, ".config", "coffeeburn")
+		configDir := filepath.Join(usr.HomeDir, ".config", "burntcoffee")
 		configFile = filepath.Join(configDir, "config.yaml")
 
 		err = os.MkdirAll(configDir, os.ModePerm)
@@ -84,13 +84,13 @@ func GetConfig(cfgFile string) Config {
 	}
 
 	if cfgFile == "" {
-		cfgFile = filepath.Join(usr.HomeDir, ".config", "coffeeburn", "config.yaml")
+		cfgFile = filepath.Join(usr.HomeDir, ".config", "burntcoffee", "config.yaml")
 	}
 
 	fmt.Println("Using config file:", cfgFile)
 	yamlFile, err := os.ReadFile(cfgFile)
 	if err != nil {
-		fmt.Println("Error opening config file:", err)
+		fmt.Printf("Config file not found: %s \n You can generate a config-file using ./burntcoffee gen-config", err)
 		os.Exit(1)
 	}
 
