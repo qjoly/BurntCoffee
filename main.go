@@ -4,6 +4,9 @@ import (
 	"fmt"
 	"os"
 
+	"github.com/qjoly/burntcoffee/config"
+	firecracker "github.com/qjoly/burntcoffee/firecracker"
+
 	"github.com/spf13/cobra"
 	"gopkg.in/yaml.v2"
 )
@@ -36,7 +39,7 @@ func init() {
 		Use:   "show-config",
 		Short: "Show the configuration",
 		Run: func(cmd *cobra.Command, args []string) {
-			config := config.getConfig(cfgFile)
+			config := config.GetConfig(cfgFile)
 
 			yamlBytes, err := yaml.Marshal(config)
 			if err != nil {
@@ -58,13 +61,13 @@ func init() {
 		Use:   "stop-jobs",
 		Short: "Stop all jobs",
 		Run: func(cmd *cobra.Command, args []string) {
-			config := config.getConfig(cfgFile)
+			config := config.GetConfig(cfgFile)
 			urls := []string{}
 			for _, instance := range config.Instances {
 				urls = append(urls, instance.URL)
 			}
 
-			_, err := firecracker.stopAllJobs(urls)
+			_, err := firecracker.StopAllJobs(urls)
 			if err != nil {
 				fmt.Println("Error starting job:", err)
 			}
@@ -82,7 +85,7 @@ func init() {
 			}
 
 			fmt.Println("Stopping job on", args[0])
-			err := firecracker.stopJob(args[0])
+			err := firecracker.StopJob(args[0])
 			if err != nil {
 				fmt.Println("Error starting job:", err)
 			}
@@ -93,13 +96,13 @@ func init() {
 		Use:   "start-job",
 		Short: "Start a job on a VM that is not running",
 		Run: func(cmd *cobra.Command, args []string) {
-			config := config.getConfig(cfgFile)
+			config := config.GetConfig(cfgFile)
 			urls := []string{}
 			for _, instance := range config.Instances {
 				urls = append(urls, instance.URL)
 			}
 
-			_, err := firecracker.findUnstartedVMs(urls)
+			_, err := firecracker.FindUnstartedVMs(urls)
 			if err != nil {
 				fmt.Println("Error starting job:", err)
 			}
@@ -110,7 +113,7 @@ func init() {
 		Use:   "gen-config",
 		Short: "Generate a config file",
 		Run: func(cmd *cobra.Command, args []string) {
-			config.generateConfigFile(cfgFile)
+			config.GenerateConfigFile(cfgFile)
 		},
 	}
 
@@ -124,7 +127,7 @@ func init() {
 			for _, instance := range config.Instances {
 				urls = append(urls, instance.URL)
 			}
-			firecracker.showJobs(urls)
+			firecracker.ShowJobs(urls)
 		},
 	}
 
