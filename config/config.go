@@ -22,7 +22,7 @@ type IP struct {
 	IP string `yaml:"ip"`
 }
 
-func generateConfigFile(cfgFile string) {
+func GenerateConfigFile(cfgFile string) {
 
 	config := Config{
 		Instances: []Instance{
@@ -77,7 +77,7 @@ func generateConfigFile(cfgFile string) {
 	}
 }
 
-func getConfig(cfgFile string) Config {
+func GetConfig(cfgFile string) Config {
 	usr, err := user.Current()
 	if err != nil {
 		panic(err)

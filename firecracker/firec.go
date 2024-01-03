@@ -9,7 +9,7 @@ import (
 	"strings"
 )
 
-func getActualStatus(ipPort string) (string, error) {
+func GetActualStatus(ipPort string) (string, error) {
 	response, err := http.Get(ipPort)
 	if err != nil {
 		return "", err
@@ -28,14 +28,14 @@ func getActualStatus(ipPort string) (string, error) {
 	return result["state"].(string), nil
 }
 
-func findUnstartedVMs(args []string) (string, error) {
+func FindUnstartedVMs(args []string) (string, error) {
 
 	for _, arg := range args {
 		if !strings.HasPrefix(arg, "http://") && !strings.HasPrefix(arg, "https://") {
 			arg = "http://" + arg
 		}
 
-		status, err := getActualStatus(arg)
+		status, err := GetActualStatus(arg)
 		if err != nil {
 			fmt.Println("Error getting actual status:", err)
 			continue
@@ -89,7 +89,7 @@ func startJob(ipPort string) error {
 }
 
 // stopJob sends a PUT request to the specified IP address and port to stop a job.
-func stopJob(ipPort string) error {
+func StopJob(ipPort string) error {
 
 	ipPort = ipPort + "/actions"
 
@@ -120,21 +120,21 @@ func stopJob(ipPort string) error {
 	return nil
 }
 
-func stopAllJobs(args []string) (string, error) {
+func StopAllJobs(args []string) (string, error) {
 
 	for _, arg := range args {
 		if !strings.HasPrefix(arg, "http://") && !strings.HasPrefix(arg, "https://") {
 			arg = "http://" + arg
 		}
 
-		status, err := getActualStatus(arg)
+		status, err := GetActualStatus(arg)
 		if err != nil {
 			fmt.Println("Error getting actual status:", err)
 			continue
 		} else {
 			fmt.Printf("%s -- %s \n", arg, status)
 			if strings.ToUpper(status) == "RUNNING" {
-				stopJob(arg)
+				StopJob(arg)
 			} else {
 				continue
 			}
@@ -143,14 +143,14 @@ func stopAllJobs(args []string) (string, error) {
 	return "", nil
 }
 
-func showJobs(args []string) {
+func ShowJobs(args []string) {
 
 	for _, arg := range args {
 		if !strings.HasPrefix(arg, "http://") && !strings.HasPrefix(arg, "https://") {
 			arg = "http://" + arg
 		}
 
-		status, err := getActualStatus(arg)
+		status, err := GetActualStatus(arg)
 		if err != nil {
 			fmt.Println("Error getting actual status:", err)
 			continue
