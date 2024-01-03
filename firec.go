@@ -44,7 +44,6 @@ func findUnstartedVMs(args []string) (string, error) {
 			if strings.ToUpper(status) == "RUNNING" {
 				continue
 			} else {
-				fmt.Println("Starting job")
 				startJob(arg)
 				return arg, nil
 			}
@@ -87,4 +86,59 @@ func startJob(ipPort string) error {
 	json.Unmarshal([]byte(body), &result)
 
 	return nil
+}
+
+// stopJob sends a PUT request to the specified IP address and port to stop a job.
+func stopJob(ipPort string) error {
+
+	ipPort = ipPort + "/actions"
+
+	request, err := http.NewRequest(http.MethodPut, ipPort, strings.NewReader(`{"action_type": "SendCtrlAltDel"}`))
+	if err != nil {
+		fmt.Println("Error creating PUT request:", err)
+		return err
+	}
+	request.Header.Set("Content-Type", "application/json")
+
+	client := &http.Client{}
+	response, err := client.Do(request)
+	if err != nil {
+		fmt.Println("Error sending PUT request:", err)
+		return err
+	}
+	defer response.Body.Close()
+
+	body, err := io.ReadAll(response.Body)
+	if err != nil {
+		fmt.Println("Error reading response body:", err)
+		return err
+	}
+
+	var result map[string]interface{}
+	json.Unmarshal([]byte(body), &result)
+
+	return nil
+}
+
+func stopAllJobs(args []string) (string, error) {
+
+	for _, arg := range args {
+		if !strings.HasPrefix(arg, "http://") && !strings.HasPrefix(arg, "https://") {
+			arg = "http://" + arg
+		}
+
+		status, err := getActualStatus(arg)
+		if err != nil {
+			fmt.Println("Error getting actual status:", err)
+			continue
+		} else {
+			fmt.Printf("%s -- %s \n", arg, status)
+			if strings.ToUpper(status) == "RUNNING" {
+				stopJob(arg)
+			} else {
+				continue
+			}
+		}
+	}
+	return "", nil
 }

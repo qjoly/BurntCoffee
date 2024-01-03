@@ -22,7 +22,8 @@ type IP struct {
 	IP string `yaml:"ip"`
 }
 
-func generateConfigFile() {
+func generateConfigFile(cfgFile string) {
+
 	config := Config{
 		Instances: []Instance{
 			{
@@ -51,41 +52,46 @@ func generateConfigFile() {
 		panic(err)
 	}
 
-	if _, err := os.Stat(filepath.Join(usr.HomeDir, ".config", "coffeeburn", "config.yaml")); err == nil {
-		fmt.Print("Config file already exists\n")
-		return
+	configFile := ""
+
+	if cfgFile != "" {
+		configFile = filepath.Join(cfgFile)
+
+	} else {
+		if _, err := os.Stat(filepath.Join(usr.HomeDir, ".config", "coffeeburn", "config.yaml")); err == nil {
+			fmt.Print("Config file already exists\n")
+			return
+		}
+		configDir := filepath.Join(usr.HomeDir, ".config", "coffeeburn")
+		configFile = filepath.Join(configDir, "config.yaml")
+
+		err = os.MkdirAll(configDir, os.ModePerm)
+		if err != nil {
+			panic(err)
+		}
 	}
 
-	configDir := filepath.Join(usr.HomeDir, ".config", "coffeeburn")
-	configFile := filepath.Join(configDir, "config.yaml")
-
-	// Create config directory if it doesn't exist
-	err = os.MkdirAll(configDir, os.ModePerm)
-	if err != nil {
-		panic(err)
-	}
-
-	// Write the file
 	err = os.WriteFile(configFile, data, 0644)
 	if err != nil {
 		panic(err)
 	}
 }
 
-// extract url from config file
-func getConfig() Config {
-	// Get the user's home directory
+func getConfig(cfgFile string) Config {
 	usr, err := user.Current()
 	if err != nil {
 		panic(err)
 	}
 
-	configFile := filepath.Join(usr.HomeDir, ".config", "coffeeburn", "config.yaml")
+	if cfgFile == "" {
+		cfgFile = filepath.Join(usr.HomeDir, ".config", "coffeeburn", "config.yaml")
+	}
 
-	// Open config file
-	yamlFile, err := os.ReadFile(configFile)
+	fmt.Println("Using config file:", cfgFile)
+	yamlFile, err := os.ReadFile(cfgFile)
 	if err != nil {
-		panic(err)
+		fmt.Println("Error opening config file:", err)
+		os.Exit(1)
 	}
 
 	// Parse config file

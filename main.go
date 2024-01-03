@@ -5,7 +5,7 @@ import (
 	"os"
 
 	"github.com/spf13/cobra"
-	"github.com/spf13/viper"
+	"gopkg.in/yaml.v2"
 )
 
 func main() {
@@ -14,8 +14,8 @@ func main() {
 
 var (
 	// Used for flags.
-	cfgFile     string
-	userLicense string
+	cfgFile string
+	verbose bool
 
 	rootCmd = &cobra.Command{
 		Use:   "coffeeburn",
@@ -30,40 +30,71 @@ func Execute() error {
 }
 
 func init() {
-	cobra.OnInitialize(initConfig)
-
 	rootCmd.PersistentFlags().StringVar(&cfgFile, "config", "", "config file (default is $HOME/.config/coffeeburn/config.yaml)")
-	rootCmd.PersistentFlags().StringP("author", "a", "YOUR NAME", "author name for copyright attribution")
-	rootCmd.PersistentFlags().StringVarP(&userLicense, "license", "l", "", "name of license for the project")
-	rootCmd.PersistentFlags().Bool("viper", true, "use Viper for configuration")
-	viper.BindPFlag("author", rootCmd.PersistentFlags().Lookup("author"))
-	viper.BindPFlag("useViper", rootCmd.PersistentFlags().Lookup("viper"))
-	viper.SetDefault("author", "Quentin JOLY")
-	viper.SetDefault("license", "apache")
+	rootCmd.PersistentFlags().BoolVarP(&verbose, "verbose", "v", false, "verbose output")
 
-	// show functions in package configfile
-
-	genConfigCmd := &cobra.Command{
-		Use:   "gen-config",
-		Short: "Generate the configuration file",
+	showConfig := &cobra.Command{
+		Use:   "show-config",
+		Short: "Show the configuration",
 		Run: func(cmd *cobra.Command, args []string) {
-			generateConfigFile()
+			config := getConfig(cfgFile)
+
+			yamlBytes, err := yaml.Marshal(config)
+			if err != nil {
+				panic(err)
+			}
+			fmt.Printf("%s\n", string(yamlBytes))
 		},
 	}
 
-	debug := &cobra.Command{
-		Use:   "debug",
-		Short: "Debug the application",
+	version := &cobra.Command{
+		Use:   "version",
+		Short: "Show the version",
 		Run: func(cmd *cobra.Command, args []string) {
-			getConfig()
+			fmt.Println("Version: 0.1.0")
 		},
 	}
 
-	job := &cobra.Command{
+	stopAllJobs := &cobra.Command{
+		Use:   "stop-jobs",
+		Short: "Stop all jobs",
+		Run: func(cmd *cobra.Command, args []string) {
+			config := getConfig(cfgFile)
+			urls := []string{}
+			for _, instance := range config.Instances {
+				urls = append(urls, instance.URL)
+			}
+
+			_, err := stopAllJobs(urls)
+			if err != nil {
+				fmt.Println("Error starting job:", err)
+			}
+		},
+	}
+
+	stopJob := &cobra.Command{
+		Use:   "stop-job",
+		Short: "Stop a running job",
+		Run: func(cmd *cobra.Command, args []string) {
+			if len(args) == 0 || len(args) > 1 {
+				fmt.Println("Usage: coffeeburn stop-job <ip:port>")
+				fmt.Println("Example: coffeeburn stop-job http://192.168.1.10:8001")
+				os.Exit(1)
+			}
+
+			fmt.Println("Stopping job on", args[0])
+			err := stopJob(args[0])
+			if err != nil {
+				fmt.Println("Error starting job:", err)
+			}
+		},
+	}
+
+	startJob := &cobra.Command{
 		Use:   "start-job",
-		Short: "Start a job on a VM",
+		Short: "Start a job on a VM that is not running",
 		Run: func(cmd *cobra.Command, args []string) {
-			config := getConfig()
+			config := getConfig(cfgFile)
 			urls := []string{}
 			for _, instance := range config.Instances {
 				urls = append(urls, instance.URL)
@@ -76,29 +107,19 @@ func init() {
 		},
 	}
 
-	rootCmd.AddCommand(job)
-	rootCmd.AddCommand(debug)
+	genConfigCmd := &cobra.Command{
+		Use:   "gen-config",
+		Short: "Generate a config file",
+		Run: func(cmd *cobra.Command, args []string) {
+			generateConfigFile(cfgFile)
+		},
+	}
+
+	rootCmd.AddCommand(startJob)
+	rootCmd.AddCommand(stopAllJobs)
+	rootCmd.AddCommand(stopJob)
+	rootCmd.AddCommand(showConfig)
+	rootCmd.AddCommand(version)
 	rootCmd.AddCommand(genConfigCmd)
 
-}
-
-func initConfig() {
-	if cfgFile != "" {
-		// Use config file from the flag.
-		viper.SetConfigFile(cfgFile)
-	} else {
-		// Find home directory.
-		home, err := os.UserHomeDir()
-		cobra.CheckErr(err)
-
-		viper.AddConfigPath(home)
-		viper.SetConfigType("yaml")
-		viper.SetConfigName(".cobra")
-	}
-
-	viper.AutomaticEnv()
-
-	if err := viper.ReadInConfig(); err == nil {
-		fmt.Println("Using config file:", viper.ConfigFileUsed())
-	}
 }
