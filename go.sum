@@ -7,6 +7,10 @@ github.com/kr/pretty v0.3.1/go.mod h1:hoEshYVHaxMs3cyo3Yncou5ZscifuDolrwPKZanG3x
 github.com/kr/text v0.2.0 h1:5Nx0Ya0ZqY2ygV366QzturHI13Jq95ApcVaJBhpS+AY=
 github.com/kr/text v0.2.0/go.mod h1:eLer722TekiGuMkidMxC/pM04lWEeraHUUmBw8l2grE=
 github.com/pkg/diff v0.0.0-20210226163009-20ebb0f2a09e/go.mod h1:pJLUxLENpZxwdsKMEsNbx1VGcRFpLqf3715MtcvvzbA=
+github.com/qjoly/burntcoffee/config v0.0.0-20240103181717-e5035f632ac6 h1:4zKkCrT6Dxou3ZePsUM7JMMfCBP4Aqwwxiv14e1DqHA=
+github.com/qjoly/burntcoffee/config v0.0.0-20240103181717-e5035f632ac6/go.mod h1:NjVi3U5D0qMQ9fgfC7lzk6W/m5DEoDqxMpjW07SHSd8=
+github.com/qjoly/burntcoffee/firecracker v0.0.0-20240103181717-e5035f632ac6 h1:uqBtjznAYRT2/+twJeUJawsaj3rPFsOkOMtwXjjUmqE=
+github.com/qjoly/burntcoffee/firecracker v0.0.0-20240103181717-e5035f632ac6/go.mod h1:k7phbvF5yy/rHuV2b8zmGqSezgZE3686RBuXZARaSrQ=
 github.com/rogpeppe/go-internal v1.9.0 h1:73kH8U+JUqXU8lRuOHeVHaa/SZPifC7BkcraZVejAe8=
 github.com/rogpeppe/go-internal v1.9.0/go.mod h1:WtVeX8xhTBvf0smdhujwtBcq4Qrzq/fJaraNFVN+nFs=
 github.com/russross/blackfriday/v2 v2.1.0/go.mod h1:+Rmxgy9KzJVeS9/2gXHxylqXiyQDYRxCVz55jmeOWTM=

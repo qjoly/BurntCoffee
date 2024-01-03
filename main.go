@@ -36,7 +36,7 @@ func init() {
 		Use:   "show-config",
 		Short: "Show the configuration",
 		Run: func(cmd *cobra.Command, args []string) {
-			config := getConfig(cfgFile)
+			config := config.getConfig(cfgFile)
 
 			yamlBytes, err := yaml.Marshal(config)
 			if err != nil {
@@ -58,13 +58,13 @@ func init() {
 		Use:   "stop-jobs",
 		Short: "Stop all jobs",
 		Run: func(cmd *cobra.Command, args []string) {
-			config := getConfig(cfgFile)
+			config := config.getConfig(cfgFile)
 			urls := []string{}
 			for _, instance := range config.Instances {
 				urls = append(urls, instance.URL)
 			}
 
-			_, err := stopAllJobs(urls)
+			_, err := firecracker.stopAllJobs(urls)
 			if err != nil {
 				fmt.Println("Error starting job:", err)
 			}
@@ -82,7 +82,7 @@ func init() {
 			}
 
 			fmt.Println("Stopping job on", args[0])
-			err := stopJob(args[0])
+			err := firecracker.stopJob(args[0])
 			if err != nil {
 				fmt.Println("Error starting job:", err)
 			}
@@ -93,13 +93,13 @@ func init() {
 		Use:   "start-job",
 		Short: "Start a job on a VM that is not running",
 		Run: func(cmd *cobra.Command, args []string) {
-			config := getConfig(cfgFile)
+			config := config.getConfig(cfgFile)
 			urls := []string{}
 			for _, instance := range config.Instances {
 				urls = append(urls, instance.URL)
 			}
 
-			_, err := findUnstartedVMs(urls)
+			_, err := firecracker.findUnstartedVMs(urls)
 			if err != nil {
 				fmt.Println("Error starting job:", err)
 			}
@@ -110,7 +110,7 @@ func init() {
 		Use:   "gen-config",
 		Short: "Generate a config file",
 		Run: func(cmd *cobra.Command, args []string) {
-			generateConfigFile(cfgFile)
+			config.generateConfigFile(cfgFile)
 		},
 	}
 
@@ -119,12 +119,12 @@ func init() {
 		Short: "Show all jobs",
 		Run: func(cmd *cobra.Command, args []string) {
 
-			config := getConfig(cfgFile)
+			config := config.getConfig(cfgFile)
 			urls := []string{}
 			for _, instance := range config.Instances {
 				urls = append(urls, instance.URL)
 			}
-			showJobs(urls)
+			firecracker.showJobs(urls)
 		},
 	}
 
