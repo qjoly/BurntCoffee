@@ -13,7 +13,6 @@ func main() {
 }
 
 var (
-	// Used for flags.
 	cfgFile string
 	verbose bool
 

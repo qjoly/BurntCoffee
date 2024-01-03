@@ -49,7 +49,7 @@ func findUnstartedVMs(args []string) (string, error) {
 			}
 		}
 	}
-	return "", errors.New("No unstarted VMs found")
+	return "", errors.New("no unstarted vms found")
 }
 
 // startJob sends a PUT request to the specified IP address and port to start a job.
@@ -158,5 +158,4 @@ func showJobs(args []string) {
 			fmt.Printf("%s -- %s \n", arg, status)
 		}
 	}
-	return
 }
