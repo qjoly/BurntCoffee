@@ -1,4 +1,4 @@
-package firecracker
+package firec
 
 import (
 	"encoding/json"
