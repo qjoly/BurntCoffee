@@ -53,6 +53,10 @@ func findUnstartedVMs(args []string) (string, error) {
 	return "", errors.New("No unstarted VMs found")
 }
 
+// startJob sends a PUT request to the specified IP address and port to start a job.
+// It expects the IP address and port in the format "ip:port".
+// The function returns an error if there was a problem creating or sending the request,
+// or if there was an error reading the response body.
 func startJob(ipPort string) error {
 
 	ipPort = ipPort + "/actions"
