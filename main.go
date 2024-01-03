@@ -115,11 +115,26 @@ func init() {
 		},
 	}
 
+	showJobs := &cobra.Command{
+		Use:   "show-jobs",
+		Short: "Show all jobs",
+		Run: func(cmd *cobra.Command, args []string) {
+
+			config := getConfig(cfgFile)
+			urls := []string{}
+			for _, instance := range config.Instances {
+				urls = append(urls, instance.URL)
+			}
+			showJobs(urls)
+		},
+	}
+
 	rootCmd.AddCommand(startJob)
 	rootCmd.AddCommand(stopAllJobs)
 	rootCmd.AddCommand(stopJob)
 	rootCmd.AddCommand(showConfig)
 	rootCmd.AddCommand(version)
 	rootCmd.AddCommand(genConfigCmd)
+	rootCmd.AddCommand(showJobs)
 
 }

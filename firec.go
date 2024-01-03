@@ -142,3 +142,21 @@ func stopAllJobs(args []string) (string, error) {
 	}
 	return "", nil
 }
+
+func showJobs(args []string) {
+
+	for _, arg := range args {
+		if !strings.HasPrefix(arg, "http://") && !strings.HasPrefix(arg, "https://") {
+			arg = "http://" + arg
+		}
+
+		status, err := getActualStatus(arg)
+		if err != nil {
+			fmt.Println("Error getting actual status:", err)
+			continue
+		} else {
+			fmt.Printf("%s -- %s \n", arg, status)
+		}
+	}
+	return
+}
