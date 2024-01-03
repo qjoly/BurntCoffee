@@ -47,8 +47,6 @@ func init() {
 		},
 	}
 
-	fmt.Println(initConfigCmd)
-
 	genConfigCmd := &cobra.Command{
 		Use:   "gen-config",
 		Short: "Generate the configuration file",
@@ -57,17 +55,23 @@ func init() {
 		},
 	}
 
+	fmt.Println(getActualStatus)
+
+	job := &cobra.Command{
+		Use:   "start-job",
+		Short: "Start a job on a VM",
+		Run: func(cmd *cobra.Command, args []string) {
+			// from github.com/qjoly/burntcoffee/pkgs/firec/firec.go
+
+		},
+	}
+
 	rootCmd.AddCommand(initConfigCmd)
+	rootCmd.AddCommand(job)
 	rootCmd.AddCommand(genConfigCmd)
 
 }
 
-func startInstance() {
-	findUnstartedVMs
-
-	firecracker.findUnstartedVMs()
-
-}
 func initConfig() {
 	if cfgFile != "" {
 		// Use config file from the flag.
