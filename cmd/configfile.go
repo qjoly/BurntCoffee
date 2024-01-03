@@ -1,6 +1,7 @@
 package cmd
 
 import (
+	"fmt"
 	"os"
 	"os/user"
 	"path/filepath"
@@ -50,6 +51,12 @@ func generateConfigFile() {
 	if err != nil {
 		panic(err)
 	}
+
+	if _, err := os.Stat(filepath.Join(usr.HomeDir, ".config", "coffeeburn", "config.yaml")); err == nil {
+		fmt.Print("Config file already exists\n")
+		return
+	}
+
 	configDir := filepath.Join(usr.HomeDir, ".config", "coffeeburn")
 	configFile := filepath.Join(configDir, "config.yaml")
 
