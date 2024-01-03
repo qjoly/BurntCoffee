@@ -9,9 +9,7 @@ import (
 )
 
 func main() {
-
 	Execute()
-
 }
 
 var (
@@ -53,15 +51,33 @@ func init() {
 		},
 	}
 
+	debug := &cobra.Command{
+		Use:   "debug",
+		Short: "Debug the application",
+		Run: func(cmd *cobra.Command, args []string) {
+			getConfig()
+		},
+	}
+
 	job := &cobra.Command{
 		Use:   "start-job",
 		Short: "Start a job on a VM",
 		Run: func(cmd *cobra.Command, args []string) {
-			startJob("http://192.168.1.35:8001")
+			config := getConfig()
+			urls := []string{}
+			for _, instance := range config.Instances {
+				urls = append(urls, instance.URL)
+			}
+
+			_, err := findUnstartedVMs(urls)
+			if err != nil {
+				fmt.Println("Error starting job:", err)
+			}
 		},
 	}
 
 	rootCmd.AddCommand(job)
+	rootCmd.AddCommand(debug)
 	rootCmd.AddCommand(genConfigCmd)
 
 }

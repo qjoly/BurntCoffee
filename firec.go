@@ -6,7 +6,6 @@ import (
 	"fmt"
 	"io"
 	"net/http"
-	"os"
 	"strings"
 )
 
@@ -30,7 +29,8 @@ func getActualStatus(ipPort string) (string, error) {
 }
 
 func findUnstartedVMs(args []string) (string, error) {
-	for _, arg := range os.Args[1:] {
+
+	for _, arg := range args {
 		if !strings.HasPrefix(arg, "http://") && !strings.HasPrefix(arg, "https://") {
 			arg = "http://" + arg
 		}

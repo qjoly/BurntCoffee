@@ -71,3 +71,29 @@ func generateConfigFile() {
 		panic(err)
 	}
 }
+
+// extract url from config file
+func getConfig() Config {
+	// Get the user's home directory
+	usr, err := user.Current()
+	if err != nil {
+		panic(err)
+	}
+
+	configFile := filepath.Join(usr.HomeDir, ".config", "coffeeburn", "config.yaml")
+
+	// Open config file
+	yamlFile, err := os.ReadFile(configFile)
+	if err != nil {
+		panic(err)
+	}
+
+	// Parse config file
+	var config Config
+	err = yaml.Unmarshal(yamlFile, &config)
+	if err != nil {
+		panic(err)
+	}
+
+	return config
+}
