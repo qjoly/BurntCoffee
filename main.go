@@ -20,7 +20,7 @@ var (
 	verbose bool
 
 	rootCmd = &cobra.Command{
-		Use:   "coffeeburn",
+		Use:   "burntcoffee",
 		Short: "A way to manage firecracker VMs",
 		Long:  `burntCoffee is a cli application to manage a remote firecracker socket exposed by a socat proxy.`,
 	}
@@ -32,7 +32,7 @@ func Execute() error {
 }
 
 func init() {
-	rootCmd.PersistentFlags().StringVar(&cfgFile, "config", "", "config file (default is $HOME/.config/coffeeburn/config.yaml)")
+	rootCmd.PersistentFlags().StringVar(&cfgFile, "config", "", "config file (default is $HOME/.config/burntcoffee/config.yaml)")
 	rootCmd.PersistentFlags().BoolVarP(&verbose, "verbose", "v", false, "verbose output")
 
 	showConfig := &cobra.Command{
@@ -79,8 +79,8 @@ func init() {
 		Short: "Stop a running job",
 		Run: func(cmd *cobra.Command, args []string) {
 			if len(args) == 0 || len(args) > 1 {
-				fmt.Println("Usage: coffeeburn stop-job <ip:port>")
-				fmt.Println("Example: coffeeburn stop-job http://192.168.1.10:8001")
+				fmt.Println("Usage: burntcoffee stop-job <ip:port>")
+				fmt.Println("Example: burntcoffee stop-job http://192.168.1.10:8001")
 				os.Exit(1)
 			}
 
@@ -122,7 +122,7 @@ func init() {
 		Short: "Show all jobs",
 		Run: func(cmd *cobra.Command, args []string) {
 
-			config := config.getConfig(cfgFile)
+			config := config.GetConfig(cfgFile)
 			urls := []string{}
 			for _, instance := range config.Instances {
 				urls = append(urls, instance.URL)
