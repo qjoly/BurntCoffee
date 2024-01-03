@@ -1,4 +1,4 @@
-package firec
+package main
 
 import (
 	"encoding/json"

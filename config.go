@@ -1,4 +1,4 @@
-package config
+package main
 
 import (
 	"fmt"
@@ -22,7 +22,6 @@ type IP struct {
 	IP string `yaml:"ip"`
 }
 
-// generateConfigFile generates a configuration file and saves it to the user's home directory.
 func generateConfigFile() {
 	config := Config{
 		Instances: []Instance{

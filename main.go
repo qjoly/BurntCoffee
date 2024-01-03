@@ -34,45 +34,33 @@ func Execute() error {
 func init() {
 	cobra.OnInitialize(initConfig)
 
-	rootCmd.PersistentFlags().StringVar(&cfgFile, "config", "", "config file (default is $HOME/.cobra.yaml)")
+	rootCmd.PersistentFlags().StringVar(&cfgFile, "config", "", "config file (default is $HOME/.config/coffeeburn/config.yaml)")
 	rootCmd.PersistentFlags().StringP("author", "a", "YOUR NAME", "author name for copyright attribution")
 	rootCmd.PersistentFlags().StringVarP(&userLicense, "license", "l", "", "name of license for the project")
 	rootCmd.PersistentFlags().Bool("viper", true, "use Viper for configuration")
 	viper.BindPFlag("author", rootCmd.PersistentFlags().Lookup("author"))
 	viper.BindPFlag("useViper", rootCmd.PersistentFlags().Lookup("viper"))
-	viper.SetDefault("author", "NAME HERE <EMAIL ADDRESS>")
+	viper.SetDefault("author", "Quentin JOLY")
 	viper.SetDefault("license", "apache")
 
 	// show functions in package configfile
-
-	initConfigCmd := &cobra.Command{
-		Use:   "init-config",
-		Short: "Initialize the configuration",
-		Run: func(cmd *cobra.Command, args []string) {
-			initConfig()
-		},
-	}
 
 	genConfigCmd := &cobra.Command{
 		Use:   "gen-config",
 		Short: "Generate the configuration file",
 		Run: func(cmd *cobra.Command, args []string) {
-			config
+			generateConfigFile()
 		},
 	}
-
-	fmt.Println(getActualStatus())
 
 	job := &cobra.Command{
 		Use:   "start-job",
 		Short: "Start a job on a VM",
 		Run: func(cmd *cobra.Command, args []string) {
-			// from github.com/qjoly/burntcoffee/pkgs/firec/firec.go
-
+			startJob("http://192.168.1.35:8001")
 		},
 	}
 
-	rootCmd.AddCommand(initConfigCmd)
 	rootCmd.AddCommand(job)
 	rootCmd.AddCommand(genConfigCmd)
 
