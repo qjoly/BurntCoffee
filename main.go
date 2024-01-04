@@ -102,9 +102,16 @@ func init() {
 				urls = append(urls, instance.URL)
 			}
 
-			_, err := firecracker.FindUnstartedVMs(urls)
+			url, err := firecracker.FindUnstartedVMs(urls)
 			if err != nil {
 				fmt.Println("Error starting job:", err)
+			} else {
+				for _, instance := range config.Instances {
+					if instance.URL == url {
+						fmt.Println("IP found in the configuration file :", instance.Instance.IP)
+						break
+					}
+				}
 			}
 		},
 	}
