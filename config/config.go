@@ -22,7 +22,7 @@ type IP struct {
 	IP string `yaml:"ip"`
 }
 
-func GenerateConfigFile(cfgFile string) {
+func GenerateConfigFile(cfgFile string, silent bool) {
 
 	config := Config{
 		Instances: []Instance{
@@ -59,7 +59,9 @@ func GenerateConfigFile(cfgFile string) {
 
 	} else {
 		if _, err := os.Stat(filepath.Join(usr.HomeDir, ".config", "burntcoffee", "config.yaml")); err == nil {
-			fmt.Print("Config file already exists\n")
+			if !silent {
+				fmt.Print("Config file already exists\n")
+			}
 			return
 		}
 		configDir := filepath.Join(usr.HomeDir, ".config", "burntcoffee")
@@ -77,7 +79,7 @@ func GenerateConfigFile(cfgFile string) {
 	}
 }
 
-func GetConfig(cfgFile string) Config {
+func GetConfig(cfgFile string, silent bool) Config {
 	usr, err := user.Current()
 	if err != nil {
 		panic(err)
@@ -87,10 +89,14 @@ func GetConfig(cfgFile string) Config {
 		cfgFile = filepath.Join(usr.HomeDir, ".config", "burntcoffee", "config.yaml")
 	}
 
-	fmt.Println("Using config file:", cfgFile)
+	if !silent {
+		fmt.Println("Using config file:", cfgFile)
+	}
 	yamlFile, err := os.ReadFile(cfgFile)
 	if err != nil {
-		fmt.Printf("Config file not found: %s \n You can generate a config-file using ./burntcoffee gen-config", err)
+		if !silent {
+			fmt.Printf("Config file not found: %s \n You can generate a config-file using ./burntcoffee gen-config", err)
+		}
 		os.Exit(1)
 	}
 
