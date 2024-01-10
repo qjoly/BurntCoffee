@@ -17,7 +17,9 @@ func main() {
 
 var (
 	cfgFile string
-	verbose bool
+	silent  bool
+
+	// verbose bool
 
 	rootCmd = &cobra.Command{
 		Use:   "burntcoffee",
@@ -33,13 +35,14 @@ func Execute() error {
 
 func init() {
 	rootCmd.PersistentFlags().StringVar(&cfgFile, "config", "", "config file (default is $HOME/.config/burntcoffee/config.yaml)")
-	rootCmd.PersistentFlags().BoolVarP(&verbose, "verbose", "v", false, "verbose output")
+	// rootCmd.PersistentFlags().BoolVarP(&verbose, "verbose", "v", false, "verbose output")
+	rootCmd.PersistentFlags().BoolVarP(&silent, "silent", "s", false, "Silent execution")
 
 	showConfig := &cobra.Command{
 		Use:   "show-config",
 		Short: "Show the configuration",
 		Run: func(cmd *cobra.Command, args []string) {
-			config := config.GetConfig(cfgFile)
+			config := config.GetConfig(cfgFile, silent)
 
 			yamlBytes, err := yaml.Marshal(config)
 			if err != nil {
@@ -61,7 +64,7 @@ func init() {
 		Use:   "stop-jobs",
 		Short: "Stop all jobs",
 		Run: func(cmd *cobra.Command, args []string) {
-			config := config.GetConfig(cfgFile)
+			config := config.GetConfig(cfgFile, silent)
 			urls := []string{}
 			for _, instance := range config.Instances {
 				urls = append(urls, instance.URL)
@@ -96,19 +99,23 @@ func init() {
 		Use:   "start-job",
 		Short: "Start a job on a VM that is not running",
 		Run: func(cmd *cobra.Command, args []string) {
-			config := config.GetConfig(cfgFile)
+			config := config.GetConfig(cfgFile, silent)
 			urls := []string{}
 			for _, instance := range config.Instances {
 				urls = append(urls, instance.URL)
 			}
 
-			url, err := firecracker.FindUnstartedVMs(urls)
+			url, err := firecracker.FindUnstartedVMs(urls, silent)
 			if err != nil {
 				fmt.Println("Error starting job:", err)
 			} else {
 				for _, instance := range config.Instances {
 					if instance.URL == url {
-						fmt.Println("IP found in the configuration file :", instance.Instance.IP)
+						if !silent {
+							fmt.Println("IP found in the configuration file :", instance.Instance.IP)
+						} else {
+							fmt.Println(instance.Instance.IP)
+						}
 						break
 					}
 				}
@@ -120,7 +127,7 @@ func init() {
 		Use:   "gen-config",
 		Short: "Generate a config file",
 		Run: func(cmd *cobra.Command, args []string) {
-			config.GenerateConfigFile(cfgFile)
+			config.GenerateConfigFile(cfgFile, silent)
 		},
 	}
 
@@ -129,7 +136,7 @@ func init() {
 		Short: "Show all jobs",
 		Run: func(cmd *cobra.Command, args []string) {
 
-			config := config.GetConfig(cfgFile)
+			config := config.GetConfig(cfgFile, silent)
 			urls := []string{}
 			for _, instance := range config.Instances {
 				urls = append(urls, instance.URL)

@@ -30,7 +30,6 @@
     - [ Installation](#-installation)
     - [ Running burntcoffee](#-running-burntcoffee)
     - [ Tests](#-tests)
-- [ Roadmap](#-roadmap)
 - [ Contributing](#-contributing)
 - [ License](#-license)
 - [ Acknowledgments](#-acknowledgments)
@@ -48,8 +47,9 @@ Burntcoffee is a project that aims to provide a simple and efficient solution fo
 |    | Feature           | Description                                                                                                       |
 |----|--------------------|--------------------------------------------------------------------------------------------------------------------|
 | 📄 | **Start a job**  | Start a job on an available firecracker socket.|
-| 🧩 | **Stop jobs**     | Stop a specific job or all jobs|
-| 🧪 | **Config**        | Generate a configuration file.|
+| 🧩 | **Stop all jobs**     | Stop all running VMs in all firecracker sockets|
+| 🧩 | **Stop a specific jobs**     | Stop a single job |
+| 🧪 | **Config**        | Generate a configuration file that contains sockets and IP available for jobs |
 
 ---
 
@@ -107,16 +107,6 @@ Burntcoffee is a project that aims to provide a simple and efficient solution fo
 
 ---
 
-##  Getting Started
-
-***Requirements***
-
-Ensure you have the following dependencies installed on your system:
-
-* Go: `► INSERT-VERSION-HERE`
-* `► ...`
-* `► ...`
-
 ###  Installation
 
 1. Clone the burntcoffee repository:
@@ -137,7 +127,7 @@ go build -o myapp
 ###  Running burntcoffee
 Use the following command to run burntcoffee:
 ```sh
-./myapp
+./burntcoffee
 ```
 
 ###  Tests
@@ -145,14 +135,6 @@ To execute tests, run:
 ```sh
 go test
 ```
-
----
-
-##  Project Roadmap
-
-- [X] `► INSERT-TASK-1`
-- [ ] `► INSERT-TASK-2`
-- [ ] `► ...`
 
 ---
 
@@ -195,7 +177,7 @@ Once your PR is reviewed and approved, it will be merged into the main branch.
 
 ##  License
 
-This project is protected under the [SELECT-A-LICENSE](https://choosealicense.com/licenses) License. For more details, refer to the [LICENSE](https://choosealicense.com/licenses/) file.
+This project is protected under the [MIT](https://github.com/QJoly/BurntCoffee/blob/main/LICENSE) License. For more details, refer to the [LICENSE](https://github.com/QJoly/BurntCoffee/blob/main/LICENSE) file.
 
 ---
 
