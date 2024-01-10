@@ -95,7 +95,7 @@ func GetConfig(cfgFile string, silent bool) Config {
 	yamlFile, err := os.ReadFile(cfgFile)
 	if err != nil {
 		if !silent {
-			fmt.Printf("Config file not found: %s \n You can generate a config-file using ./burntcoffee gen-config", err)
+      fmt.Printf("Config file not found: %s \n You can generate a config-file using ./burntcoffee gen-config \n", err)
 		}
 		os.Exit(1)
 	}
