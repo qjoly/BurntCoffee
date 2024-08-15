@@ -5,7 +5,7 @@ go 1.21.5
 require (
 	github.com/qjoly/burntcoffee/config v0.0.0-20240103184335-766d2e6dc911
 	github.com/qjoly/burntcoffee/firecracker v0.0.0-20240103184335-766d2e6dc911
-	github.com/spf13/cobra v1.8.0
+	github.com/spf13/cobra v1.8.1
 	gopkg.in/yaml.v2 v2.4.0
 )
 
