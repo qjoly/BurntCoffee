@@ -1,3 +1,7 @@
+
+# ⚠️The aim of this project was solely to make progress in Golang: it is no longer active and requires a complete rewrite.⚠️
+
+
 <div align="center">
 <p align="center">
   <img src="https://raw.githubusercontent.com/PKief/vscode-material-icon-theme/ec559a9f6bfd399b82bb44393651661b08aaf7ba/icons/folder-markdown-open.svg" width="100" />
@@ -17,6 +21,8 @@
 <p align="center">
 	<!-- default option, no dependency badges. -->
 </p>
+
+ 
 </div>
 <hr>
 
